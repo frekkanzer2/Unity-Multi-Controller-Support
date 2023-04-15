@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class JoyconGamepad : IGamepad
@@ -5,6 +6,7 @@ public class JoyconGamepad : IGamepad
 
     private readonly Joycon _reference;
     private IGamepadEventHandler eventHandler;
+    private List<IGamepad.Key> pressedButtons = new List<IGamepad.Key>();
 
     public JoyconGamepad(int id, Joycon reference)
     {
@@ -58,9 +60,22 @@ public class JoyconGamepad : IGamepad
             default:
                 throw new System.NotImplementedException($"Key not implemented for gamepad {Type}");
         }
+
         if (eventHandler != null && pressure == IGamepad.PressureType.Single) eventHandler.OnButtonSinglePression(key);
         else if (eventHandler != null && pressure == IGamepad.PressureType.Continue) eventHandler.OnButtonContinuePression(key);
-        return (pressure == IGamepad.PressureType.Single) ? _reference.GetButtonDown(button) : _reference.GetButton(button);
+
+        if (!_reference.GetButton(button))
+        {
+            pressedButtons.RemoveAll(btn => btn.Equals(key));
+            return false;
+        }
+        else if (pressure == IGamepad.PressureType.Single)
+        {
+            if (pressedButtons.Contains(key)) return false;
+            pressedButtons.Add(key);
+            return true;
+        }
+        return true; // Continue mode
     }
 
     public bool IsConnected()
