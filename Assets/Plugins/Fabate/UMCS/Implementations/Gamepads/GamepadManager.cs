@@ -11,18 +11,19 @@ public class GamepadManager : MonoBehaviour
     [SerializeField]
     private bool debugEnabled;
     private string debugPrefix = "GamepadManager >";
-    private int numberOfDetectedGamepads = 0;
 
     void Start()
     {
         gamepads = new();
         associations = new();
+        if (this.debugEnabled)
+            Debug.Log($"{this.debugPrefix} Press 'G' to see every supported connected gamepad");
     }
 
     void Update()
     {
-        JoyconManager.Instance._OnUpdate(); // Necessary update for joycons
         FetchGamepads();
+        JoyconManager.Instance._OnUpdate(); // Necessary update for joycons
         if (Input.GetKeyDown(KeyCode.G))
             DisplayGamepadsStatus();
         if (Input.GetKeyDown(KeyCode.R))
@@ -72,12 +73,11 @@ public class GamepadManager : MonoBehaviour
 
     private void FetchGamepads()
     {
-        int actualNumberOfGamepads = Gamepad.all.Count;
-        if (this.numberOfDetectedGamepads != actualNumberOfGamepads)
+        InputSystem.onDeviceChange +=
+        (device, change) =>
         {
-            this.numberOfDetectedGamepads = actualNumberOfGamepads;
             ReloadAvailableGamepads();
-        }
+        };
     }
 
     private void ReloadAvailableGamepads()
@@ -92,7 +92,6 @@ public class GamepadManager : MonoBehaviour
                 gamepads.Add(new JoyconGamepad(lastGamepadId, j));
                 lastGamepadId++;
             }
-        Debug.Log($"{this.debugPrefix} Found {gamepads.Count} supported gamepads\nPress 'G' to see every supported connected gamepad");
     }
 
     private void GamepadPressDetection()
