@@ -7,7 +7,7 @@ public class GamepadManager : MonoBehaviour
 {
 
     private List<IGamepad> gamepads;
-    private List<PlayerControllerDto> associations;
+    private List<PlayerControllerAssociationDto> associations;
     [SerializeField]
     private bool debugEnabled;
     private string debugPrefix = "GamepadManager >";
@@ -17,7 +17,6 @@ public class GamepadManager : MonoBehaviour
     {
         gamepads = new();
         associations = new();
-        //StartCoroutine(ReloadAvailableGamepadsCoroutine(60));
     }
 
     void Update()
@@ -41,7 +40,7 @@ public class GamepadManager : MonoBehaviour
         else foreach (IGamepad gamepad in gamepads) Debug.Log($"{debugPrefix} {gamepad.Status}");
     }
 
-    public List<PlayerControllerDto> Associations
+    public List<PlayerControllerAssociationDto> Associations
     {
         get
         {
@@ -49,7 +48,7 @@ public class GamepadManager : MonoBehaviour
         }
     }
 
-    public void AddAssociation(int playerNumber, int gamepadId) => this.associations.Add(new PlayerControllerDto() { PlayerNumber = playerNumber, ControllerId = gamepadId });
+    public void AddAssociation(int playerNumber, int gamepadId) => this.associations.Add(new PlayerControllerAssociationDto() { PlayerNumber = playerNumber, ControllerId = gamepadId });
 
     public void RemoveAssociation(int playerNumber) => this.associations.RemoveAll(association => association.PlayerNumber == playerNumber);
 
