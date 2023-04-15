@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+using UnityEngine.InputSystem.XInput;
 
 public class GamepadManager : MonoBehaviour
 {
@@ -16,8 +18,9 @@ public class GamepadManager : MonoBehaviour
     {
         gamepads = new();
         associations = new();
+        ReloadAvailableGamepads();
         if (this.debugEnabled)
-            Debug.Log($"{this.debugPrefix} Press 'G' to see every supported connected gamepad");
+            Debug.Log($"{this.debugPrefix} Press 'G' to see every supported connected gamepad\nPress 'R' to force gamepads detection");
     }
 
     void Update()
@@ -28,11 +31,11 @@ public class GamepadManager : MonoBehaviour
             DisplayGamepadsStatus();
         if (Input.GetKeyDown(KeyCode.R))
             ReloadAvailableGamepads();
+        GamepadPressDetection();
     }
 
     void FixedUpdate()
     {
-        GamepadPressDetection();
     }
 
     public void DisplayGamepadsStatus()
@@ -92,6 +95,18 @@ public class GamepadManager : MonoBehaviour
                 gamepads.Add(new JoyconGamepad(lastGamepadId, j));
                 lastGamepadId++;
             }
+        Gamepad[] gamepadsFromInputSystem = Gamepad.all.ToArray();
+        foreach(Gamepad gp in gamepadsFromInputSystem)
+        {
+            if (gp is XInputController)
+            {
+                gamepads.Add(new XboxGamepad(lastGamepadId, (XInputController)gp));
+                lastGamepadId++;
+            } else if (gp is DualShockGamepad)
+            {
+
+            }
+        }
     }
 
     private void GamepadPressDetection()
