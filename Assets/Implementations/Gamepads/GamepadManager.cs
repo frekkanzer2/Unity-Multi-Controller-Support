@@ -6,27 +6,19 @@ public class GamepadManager : MonoBehaviour
 {
 
     private List<IGamepad> gamepads;
-    private List<Joycon> joyconsFromExternalManager;
-
     private List<PlayerControllerDto> associations;
 
     void Start()
     {
         gamepads = new();
         associations = new();
-        joyconsFromExternalManager = JoyconManager.Instance.j;
-        int lastGamepadId = 1;
-        if (!joyconsFromExternalManager.IsEmpty())
-            foreach (Joycon j in joyconsFromExternalManager)
-            {
-                gamepads.Add(new JoyconGamepad(lastGamepadId, j));
-                lastGamepadId++;
-            }
+        ReloadAvailableGamepads();
         DisplayGamepadsStatus();
     }
 
     void Update()
     {
+        ReloadAvailableGamepads();
         if (Input.GetKeyDown(KeyCode.G))
             DisplayGamepadsStatus();
     }
@@ -35,6 +27,20 @@ public class GamepadManager : MonoBehaviour
     {
         if (gamepads.IsEmpty()) Debug.LogWarning("GamepadManager > No gamepad is connected");
         else foreach (IGamepad gamepad in gamepads) Debug.Log("GamepadManager > " + gamepad.Status);
+    }
+
+    public void ReloadAvailableGamepads()
+    {
+        gamepads = new();
+        associations = new();
+        int lastGamepadId = 1;
+        JoyconManager.Instance.ReloadJoycons();
+        if (!JoyconManager.Instance.j.IsEmpty())
+            foreach (Joycon j in JoyconManager.Instance.j)
+            {
+                gamepads.Add(new JoyconGamepad(lastGamepadId, j));
+                lastGamepadId++;
+            }
     }
 
     public List<PlayerControllerDto> Associations

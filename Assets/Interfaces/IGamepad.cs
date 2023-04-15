@@ -17,9 +17,13 @@ public interface IGamepad
     bool IsStartPressed();
     
     Vector2 GetAnalogMovement();
+    string ControllerSpecificStatus
+    {
+        get;
+    }
     string Status
     {
-        get { return (IsConnected()) ? $"Gamepad {Id} of type {Type} is connected" : $"Gamepad {Id} of type {Type} is offline"; }
+        get { return (IsConnected()) ? $"Gamepad {Id} of type {Type} is connected with status {ControllerSpecificStatus}" : $"Gamepad {Id} of type {Type} is offline with status {ControllerSpecificStatus}"; }
     }
 
 }

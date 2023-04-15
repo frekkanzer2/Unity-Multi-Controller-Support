@@ -16,6 +16,8 @@ public class JoyconGamepad : IGamepad
     public int Id { get ; set ; }
     public string Type { get; set; }
 
+    public string ControllerSpecificStatus => $"{_reference.state}";
+
     public Vector2 GetAnalogMovement()
     {
         throw new System.NotImplementedException();
