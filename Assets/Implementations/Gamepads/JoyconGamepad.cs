@@ -25,22 +25,30 @@ public class JoyconGamepad : IGamepad
 
     public bool HasPressedButton1()
     {
-        return _reference.GetButton(Joycon.Button.DPAD_DOWN);
+        if (_reference.isLeft)
+            return _reference.GetButton(Joycon.Button.DPAD_LEFT);
+        return _reference.GetButton(Joycon.Button.DPAD_RIGHT);
     }
 
     public bool HasPressedButton2()
     {
-        return _reference.GetButton(Joycon.Button.DPAD_RIGHT);
+        if (_reference.isLeft)
+            return _reference.GetButton(Joycon.Button.DPAD_DOWN);
+        return _reference.GetButton(Joycon.Button.DPAD_UP);
     }
 
     public bool HasPressedButton3()
     {
-        return _reference.GetButton(Joycon.Button.DPAD_UP);
+        if (_reference.isLeft)
+            return _reference.GetButton(Joycon.Button.DPAD_RIGHT);
+        return _reference.GetButton(Joycon.Button.DPAD_LEFT);
     }
 
     public bool HasPressedButton4()
     {
-        return _reference.GetButton(Joycon.Button.DPAD_LEFT);
+        if (_reference.isLeft)
+            return _reference.GetButton(Joycon.Button.DPAD_UP);
+        return _reference.GetButton(Joycon.Button.DPAD_DOWN);
     }
 
     public bool IsConnected()
@@ -70,13 +78,13 @@ public class JoyconGamepad : IGamepad
         throw new System.NotImplementedException();
     }
 
-    public bool HasPressedButtonStart()
-    {
-        return _reference.GetButton(Joycon.Button.PLUS) || _reference.GetButton(Joycon.Button.MINUS);
-    }
-
     public void SetPlayerReference(IPlayer player)
     {
         this.player = player;
+    }
+
+    public bool IsStartPressed()
+    {
+        return _reference.GetButton(Joycon.Button.PLUS) || _reference.GetButton(Joycon.Button.MINUS);
     }
 }

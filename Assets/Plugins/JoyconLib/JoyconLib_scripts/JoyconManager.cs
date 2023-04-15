@@ -30,8 +30,6 @@ public class JoyconManager: MonoBehaviour
         if (instance != null) Destroy(gameObject);
         instance = this;
 		ReloadJoycons();
-		foreach (Joycon j in this.j)
-			Debug.Log($"{j.state}");
     }
 
 	public void ReloadJoycons()
