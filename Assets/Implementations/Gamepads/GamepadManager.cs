@@ -17,7 +17,7 @@ public class GamepadManager : MonoBehaviour
         associations = new();
         ReloadAvailableGamepads();
         DisplayGamepadsStatus();
-        StartCoroutine(ReloadAvailableGamepadsCoroutine(10));
+        StartCoroutine(ReloadAvailableGamepadsCoroutine(60));
     }
 
     void Update()

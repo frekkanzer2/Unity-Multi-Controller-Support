@@ -20,7 +20,10 @@ public class JoyconGamepad : IGamepad
 
     public Vector2 GetAnalogMovement()
     {
-        return _reference.GetStick();
+        Vector2 stick = _reference.GetStick();
+        if (_reference.isLeft)
+            return new Vector2(stick.y, stick.x * -1);
+        return new Vector2(stick.y * -1, stick.x);
     }
 
     public bool HasPressedButton1()
