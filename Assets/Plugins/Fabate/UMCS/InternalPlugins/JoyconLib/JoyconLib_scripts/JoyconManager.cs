@@ -18,8 +18,8 @@ public class JoyconManager
 	private const ushort product_r = 0x2007;
 
     public List<Joycon> j; // Array of all connected Joy-Cons
-    private static JoyconManager _instance = null;
 
+    private static JoyconManager _instance = null;
     public static JoyconManager Instance
     {
         get { 

@@ -14,8 +14,18 @@ public class GamepadManager : MonoBehaviour
     private bool debugEnabled;
     private string debugPrefix = "GamepadManager >";
 
+    private static GamepadManager _instance = null;
+    public static GamepadManager Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     void Start()
     {
+        if (_instance == null) _instance = this;
         gamepads = new();
         associations = new();
         ReloadAvailableGamepads();
