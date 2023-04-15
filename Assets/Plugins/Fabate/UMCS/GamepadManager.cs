@@ -77,6 +77,33 @@ public class GamepadManager : MonoBehaviour
         }
     }
 
+    public void ReloadAvailableGamepads()
+    {
+        gamepads = new();
+        associations = new();
+        int lastGamepadId = 1;
+        JoyconManager.Instance.ReloadJoycons();
+        if (!JoyconManager.Instance.j.IsEmpty())
+            foreach (Joycon j in JoyconManager.Instance.j)
+            {
+                gamepads.Add(new JoyconGamepad(lastGamepadId, j));
+                lastGamepadId++;
+            }
+        Gamepad[] gamepadsFromInputSystem = Gamepad.all.ToArray();
+        foreach (Gamepad gp in gamepadsFromInputSystem)
+        {
+            if (gp is XInputController)
+            {
+                gamepads.Add(new XboxGamepad(lastGamepadId, (XInputController)gp));
+                lastGamepadId++;
+            }
+            else if (gp is DualShockGamepad)
+            {
+
+            }
+        }
+    }
+
     private void OnApplicationQuit()
     {
         JoyconManager.Instance.OnApplicationQuit();
@@ -91,32 +118,6 @@ public class GamepadManager : MonoBehaviour
         {
             ReloadAvailableGamepads();
         };
-    }
-
-    private void ReloadAvailableGamepads()
-    {
-        gamepads = new();
-        associations = new();
-        int lastGamepadId = 1;
-        JoyconManager.Instance.ReloadJoycons();
-        if (!JoyconManager.Instance.j.IsEmpty())
-            foreach (Joycon j in JoyconManager.Instance.j)
-            {
-                gamepads.Add(new JoyconGamepad(lastGamepadId, j));
-                lastGamepadId++;
-            }
-        Gamepad[] gamepadsFromInputSystem = Gamepad.all.ToArray();
-        foreach(Gamepad gp in gamepadsFromInputSystem)
-        {
-            if (gp is XInputController)
-            {
-                gamepads.Add(new XboxGamepad(lastGamepadId, (XInputController)gp));
-                lastGamepadId++;
-            } else if (gp is DualShockGamepad)
-            {
-
-            }
-        }
     }
 
     private void GamepadPressDetection()
