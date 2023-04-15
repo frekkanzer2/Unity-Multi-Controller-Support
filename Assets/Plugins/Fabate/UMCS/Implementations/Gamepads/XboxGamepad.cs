@@ -33,7 +33,8 @@ public class XboxGamepad : IGamepad
 
     public Vector2 GetAnalogMovement(IGamepad.Analog analog)
     {
-        throw new System.NotImplementedException();
+        if (analog == IGamepad.Analog.Left) return _reference.leftStick.ReadValue();
+        else return _reference.rightStick.ReadValue();
     }
 
     public bool IsButtonPressed(IGamepad.Key key, IGamepad.PressureType pressure)
