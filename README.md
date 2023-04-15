@@ -6,6 +6,7 @@ You can use it freely in your projects, but don't forget to credit me!
 
 Currently supported gamepads:
 - Nintendo Switch Joycons
+- Xbox One
 
 ## How to install
 Go into the releases section of GitHub and download the latest unitypackage. Open it with Unity inside your project, everything will be imported inside "/Assets/Plugins/Fabate/UMCS"
