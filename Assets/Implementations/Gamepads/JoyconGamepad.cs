@@ -4,7 +4,7 @@ public class JoyconGamepad : IGamepad
 {
 
     private readonly Joycon _reference;
-    private IPlayer player;
+    private IGamepadEventHandler eventHandler;
 
     public JoyconGamepad(int id, Joycon reference)
     {
@@ -12,13 +12,20 @@ public class JoyconGamepad : IGamepad
         Type = "Joycon";
         _reference = reference;
     }
+    public JoyconGamepad(int id, Joycon reference, IGamepadEventHandler eventHandler)
+    {
+        Id = id;
+        Type = "Joycon";
+        _reference = reference;
+        SetGamepadEventHandler(eventHandler);
+    }
 
     public int Id { get ; set ; }
     public string Type { get; set; }
 
     public string ControllerSpecificStatus => $"{_reference.state}";
 
-    public Vector2 GetAnalogMovement()
+    public Vector2 GetAnalogMovement(IGamepad.Analog analog)
     {
         Vector2 stick = _reference.GetStick();
         if (_reference.isLeft)
@@ -26,68 +33,43 @@ public class JoyconGamepad : IGamepad
         return new Vector2(stick.y * -1, stick.x);
     }
 
-    public bool HasPressedButton1()
+    public bool IsButtonPressed(IGamepad.Key key, IGamepad.PressureType pressure)
     {
-        if (_reference.isLeft)
-            return _reference.GetButton(Joycon.Button.DPAD_LEFT);
-        return _reference.GetButton(Joycon.Button.DPAD_RIGHT);
-    }
-
-    public bool HasPressedButton2()
-    {
-        if (_reference.isLeft)
-            return _reference.GetButton(Joycon.Button.DPAD_DOWN);
-        return _reference.GetButton(Joycon.Button.DPAD_UP);
-    }
-
-    public bool HasPressedButton3()
-    {
-        if (_reference.isLeft)
-            return _reference.GetButton(Joycon.Button.DPAD_RIGHT);
-        return _reference.GetButton(Joycon.Button.DPAD_LEFT);
-    }
-
-    public bool HasPressedButton4()
-    {
-        if (_reference.isLeft)
-            return _reference.GetButton(Joycon.Button.DPAD_UP);
-        return _reference.GetButton(Joycon.Button.DPAD_DOWN);
+        Joycon.Button button;
+        switch(key)
+        {
+            case IGamepad.Key.ActionButtonDown:
+                button = (_reference.isLeft) ? Joycon.Button.DPAD_LEFT : Joycon.Button.DPAD_RIGHT;
+                break;
+            case IGamepad.Key.ActionButtonRight:
+                button = (_reference.isLeft) ? Joycon.Button.DPAD_DOWN : Joycon.Button.DPAD_UP;
+                break;
+            case IGamepad.Key.ActionButtonUp:
+                button = (_reference.isLeft) ? Joycon.Button.DPAD_RIGHT : Joycon.Button.DPAD_LEFT;
+                break;
+            case IGamepad.Key.ActionButtonLeft:
+                button = (_reference.isLeft) ? Joycon.Button.DPAD_UP : Joycon.Button.DPAD_DOWN;
+                break;
+            case IGamepad.Key.Start:
+            case IGamepad.Key.Select:
+            case IGamepad.Key.Center:
+                button = (_reference.isLeft) ? Joycon.Button.MINUS : Joycon.Button.PLUS;
+                break;
+            default:
+                throw new System.NotImplementedException($"Key not implemented for gamepad {Type}");
+        }
+        if (eventHandler != null && pressure == IGamepad.PressureType.Single) eventHandler.OnButtonSinglePression(key);
+        else if (eventHandler != null && pressure == IGamepad.PressureType.Continue) eventHandler.OnButtonContinuePression(key);
+        return (pressure == IGamepad.PressureType.Single) ? _reference.GetButtonDown(button) : _reference.GetButton(button);
     }
 
     public bool IsConnected()
     {
         bool isConnected = _reference.state == Joycon.state_.IMU_DATA_OK;
-        if (player != null && !isConnected) player.SetDead();
+        if (eventHandler != null && isConnected) eventHandler.OnGamepadConnected();
+        if (eventHandler != null && !isConnected) eventHandler.OnGamepadDeconnected();
         return isConnected;
     }
 
-    public bool IsPressingButton1()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public bool IsPressingButton2()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public bool IsPressingButton3()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public bool IsPressingButton4()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void SetPlayerReference(IPlayer player)
-    {
-        this.player = player;
-    }
-
-    public bool IsStartPressed()
-    {
-        return _reference.GetButton(Joycon.Button.PLUS) || _reference.GetButton(Joycon.Button.MINUS);
-    }
+    public void SetGamepadEventHandler(IGamepadEventHandler eventHandler) => this.eventHandler = eventHandler;
 }

@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-
 using UnityEngine;
 using System;
-public class JoyconManager: MonoBehaviour
+
+public class JoyconManager
 {
 
     // Settings accessible via Unity
@@ -18,19 +18,20 @@ public class JoyconManager: MonoBehaviour
 	private const ushort product_r = 0x2007;
 
     public List<Joycon> j; // Array of all connected Joy-Cons
-    static JoyconManager instance;
+    private static JoyconManager _instance = null;
 
     public static JoyconManager Instance
     {
-        get { return instance; }
+        get { 
+			if (_instance == null) _instance = new();
+			return _instance;
+		}
     }
 
-    void Awake()
-    {
-        if (instance != null) Destroy(gameObject);
-        instance = this;
+	private JoyconManager()
+	{
 		ReloadJoycons();
-    }
+	}
 
 	public void ReloadJoycons()
     {
@@ -45,11 +46,9 @@ public class JoyconManager: MonoBehaviour
 
 		if (ptr == IntPtr.Zero)
 		{
-			ptr = HIDapi.hid_enumerate(vendor_id_, 0x0);
-			if (ptr == IntPtr.Zero)
-			{
-				HIDapi.hid_free_enumeration(ptr);
-			}
+            IntPtr intPtr = HIDapi.hid_enumerate(vendor_id_, 0x0);
+            ptr = intPtr;
+			if (ptr == IntPtr.Zero) HIDapi.hid_free_enumeration(ptr);
 		}
 		hid_device_info enumerate;
 		while (ptr != IntPtr.Zero)
@@ -57,14 +56,8 @@ public class JoyconManager: MonoBehaviour
 			enumerate = (hid_device_info)Marshal.PtrToStructure(ptr, typeof(hid_device_info));
 			if (enumerate.product_id == product_l || enumerate.product_id == product_r)
 			{
-				if (enumerate.product_id == product_l)
-				{
-					isLeft = true;
-				}
-				else if (enumerate.product_id == product_r)
-				{
-					isLeft = false;
-				}
+				if (enumerate.product_id == product_l) isLeft = true;
+				else if (enumerate.product_id == product_r) isLeft = false;
 				IntPtr handle = HIDapi.hid_open_path(enumerate.path);
 				HIDapi.hid_set_nonblocking(handle, 1);
 				j.Add(new Joycon(handle, EnableIMU, EnableLocalize & EnableIMU, 0.05f, isLeft));
@@ -83,7 +76,7 @@ public class JoyconManager: MonoBehaviour
 		}
 	}
 
-    void Update()
+    public void _OnUpdate()
     {
 		for (int i = 0; i < j.Count; ++i)
 		{
@@ -91,11 +84,11 @@ public class JoyconManager: MonoBehaviour
 		}
     }
 
-    void OnApplicationQuit()
+    public void OnApplicationQuit()
     {
 		for (int i = 0; i < j.Count; ++i)
 		{
-			j[i].Detach ();
+			j[i].Detach();
 		}
     }
 }

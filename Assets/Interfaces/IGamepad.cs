@@ -4,19 +4,10 @@ public interface IGamepad
 {
     int Id { get; set; }
     string Type { get; set; }
-    void SetPlayerReference(IPlayer player);
+    void SetGamepadEventHandler(IGamepadEventHandler eventHandler);
     bool IsConnected();
-    bool HasPressedButton1();
-    bool HasPressedButton2();
-    bool HasPressedButton3();
-    bool HasPressedButton4();
-    bool IsPressingButton1();
-    bool IsPressingButton2();
-    bool IsPressingButton3();
-    bool IsPressingButton4();
-    bool IsStartPressed();
-    
-    Vector2 GetAnalogMovement();
+    bool IsButtonPressed(IGamepad.Key key, IGamepad.PressureType pressure);
+    Vector2 GetAnalogMovement(IGamepad.Analog analog);
     string ControllerSpecificStatus
     {
         get;
@@ -24,6 +15,37 @@ public interface IGamepad
     string Status
     {
         get { return (IsConnected()) ? $"Gamepad {Id} of type {Type} is connected with status {ControllerSpecificStatus}" : $"Gamepad {Id} of type {Type} is connected, but there's an error. Actual status: {ControllerSpecificStatus}"; }
+    }
+
+    enum Key
+    {
+        ActionButtonDown,
+        ActionButtonRight,
+        ActionButtonUp,
+        ActionButtonLeft,
+        Select,
+        Start,
+        Center,
+        MovementButtonDown,
+        MovementButtonRight,
+        MovementButtonUp,
+        MovementButtonLeft,
+        LeftAnalog,
+        RightAnalog,
+        LeftShoulder,
+        RightShoulder,
+        LeftTrigger,
+        RightTrigger
+    }
+    enum Analog
+    {
+        Left,
+        Right
+    }
+    enum PressureType
+    {
+        Single,
+        Continue
     }
 
 }
