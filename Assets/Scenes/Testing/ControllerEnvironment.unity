@@ -245,8 +245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 405bad29b2b998c408059182c189d9e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnableIMU: 0
-  EnableLocalize: 0
+  EnableIMU: 1
+  EnableLocalize: 1
 --- !u!4 &1849923961
 Transform:
   m_ObjectHideFlags: 0
@@ -274,3 +274,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c73e63d17b37194fb2a100234fd3218, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugEnabled: 1

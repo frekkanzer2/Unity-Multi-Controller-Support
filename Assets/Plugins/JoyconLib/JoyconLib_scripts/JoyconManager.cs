@@ -30,6 +30,8 @@ public class JoyconManager: MonoBehaviour
         if (instance != null) Destroy(gameObject);
         instance = this;
 		ReloadJoycons();
+		foreach (Joycon j in this.j)
+			Debug.Log($"{j.state}");
     }
 
 	public void ReloadJoycons()
@@ -73,19 +75,15 @@ public class JoyconManager: MonoBehaviour
 			ptr = enumerate.next;
 		}
 		HIDapi.hid_free_enumeration(top_ptr);
-	}
-
-    void Start()
-    {
-		for (int i = 0; i < j.Count; ++i)
+		for (int k = 0; k < j.Count; ++k)
 		{
-			Joycon jc = j [i];
+			Joycon jc = j[k];
 			byte LEDs = 0x0;
-			LEDs |= (byte)(0x1 << i);
-			jc.Attach (leds_: LEDs);
-			jc.Begin ();
+			LEDs |= (byte)(0x1 << k);
+			jc.Attach(leds_: LEDs);
+			jc.Begin();
 		}
-    }
+	}
 
     void Update()
     {

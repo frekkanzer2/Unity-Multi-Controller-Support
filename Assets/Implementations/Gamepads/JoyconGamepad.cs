@@ -20,32 +20,32 @@ public class JoyconGamepad : IGamepad
 
     public Vector2 GetAnalogMovement()
     {
-        throw new System.NotImplementedException();
+        return _reference.GetStick();
     }
 
     public bool HasPressedButton1()
     {
-        throw new System.NotImplementedException();
+        return _reference.GetButton(Joycon.Button.DPAD_DOWN);
     }
 
     public bool HasPressedButton2()
     {
-        throw new System.NotImplementedException();
+        return _reference.GetButton(Joycon.Button.DPAD_RIGHT);
     }
 
     public bool HasPressedButton3()
     {
-        throw new System.NotImplementedException();
+        return _reference.GetButton(Joycon.Button.DPAD_UP);
     }
 
     public bool HasPressedButton4()
     {
-        throw new System.NotImplementedException();
+        return _reference.GetButton(Joycon.Button.DPAD_LEFT);
     }
 
     public bool IsConnected()
     {
-        bool isConnected = _reference.state != Joycon.state_.DROPPED;
+        bool isConnected = _reference.state == Joycon.state_.IMU_DATA_OK;
         if (player != null && !isConnected) player.SetDead();
         return isConnected;
     }
@@ -70,9 +70,9 @@ public class JoyconGamepad : IGamepad
         throw new System.NotImplementedException();
     }
 
-    public bool IsStartPressed()
+    public bool HasPressedButtonStart()
     {
-        throw new System.NotImplementedException();
+        return _reference.GetButton(Joycon.Button.PLUS) || _reference.GetButton(Joycon.Button.MINUS);
     }
 
     public void SetPlayerReference(IPlayer player)

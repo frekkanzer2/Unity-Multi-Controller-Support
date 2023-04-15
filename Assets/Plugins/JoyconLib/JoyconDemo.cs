@@ -7,11 +7,12 @@ public class JoyconDemo : MonoBehaviour {
 	private List<Joycon> joycons;
 
     // Values made available via Unity
-    public float[] stick;
+    public Vector2 stick;
     public Vector3 gyro;
     public Vector3 accel;
     public int jc_ind = 0;
     public Quaternion orientation;
+	public string status;
 
     void Start ()
     {
@@ -71,11 +72,14 @@ public class JoyconDemo : MonoBehaviour {
 
             // Accel values:  x, y, z axis values (in Gs)
             accel = j.GetAccel();
+			status = "" + j.state;
 
             orientation = j.GetVector();
 			if (j.GetButton(Joycon.Button.DPAD_UP)){
 				gameObject.GetComponent<Renderer>().material.color = Color.red;
-			} else{
+			}
+			if (j.GetButton(Joycon.Button.DPAD_DOWN))
+			{
 				gameObject.GetComponent<Renderer>().material.color = Color.blue;
 			}
             gameObject.transform.rotation = orientation;

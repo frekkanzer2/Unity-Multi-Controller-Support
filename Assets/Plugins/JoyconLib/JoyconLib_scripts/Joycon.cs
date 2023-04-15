@@ -52,7 +52,7 @@ public class Joycon
     private bool[] buttons = new bool[13];
     private bool[] down_ = new bool[13];
 
-    private float[] stick = { 0, 0 };
+    private Vector2 stick = Vector2.zero;
 
     private 
 	IntPtr handle;
@@ -216,7 +216,7 @@ public class Joycon
     {
         return buttons_up[(int)b];
     }
-    public float[] GetStick()
+    public Vector2 GetStick()
     {
         return stick;
     }
@@ -521,7 +521,7 @@ public class Joycon
     {
         first_imu_packet = true;
     }
-    private float[] CenterSticks(UInt16[] vals)
+    private Vector2 CenterSticks(UInt16[] vals)
     {
 
         float[] s = { 0, 0 };
@@ -538,7 +538,7 @@ public class Joycon
                 s[i] = diff / stick_cal[4 + i];
             }
         }
-        return s;
+        return new Vector2(s[0], s[1]);
     }
     public void SetRumble(float low_freq, float high_freq, float amp, int time = 0)
     {

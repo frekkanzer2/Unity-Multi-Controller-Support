@@ -23,7 +23,7 @@ public interface IGamepad
     }
     string Status
     {
-        get { return (IsConnected()) ? $"Gamepad {Id} of type {Type} is connected with status {ControllerSpecificStatus}" : $"Gamepad {Id} of type {Type} is offline with status {ControllerSpecificStatus}"; }
+        get { return (IsConnected()) ? $"Gamepad {Id} of type {Type} is connected with status {ControllerSpecificStatus}" : $"Gamepad {Id} of type {Type} is connected, but there's an error. Actual status: {ControllerSpecificStatus}"; }
     }
 
 }
