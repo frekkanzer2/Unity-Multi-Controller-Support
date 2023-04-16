@@ -63,8 +63,14 @@ public class GamepadManager : MonoBehaviour
     }
 
     public void AddAssociation(int playerNumber, int gamepadId) => this.associations.Add(new PlayerControllerAssociationDto() { PlayerNumber = playerNumber, ControllerId = gamepadId });
+    public PlayerControllerAssociationDto? GetAssociationByPlayerNumber(int playerNumber) => this.associations.Find(association => association.PlayerNumber == playerNumber);
+    public PlayerControllerAssociationDto? GetAssociationByGamepadId(int gamepadId) => this.associations.Find(association => association.ControllerId == gamepadId);
 
     public void RemoveAssociation(int playerNumber) => this.associations.RemoveAll(association => association.PlayerNumber == playerNumber);
+
+    public IGamepad? GetGamepadById(int id) => this.gamepads.Find(gamepad => gamepad.Id == id);
+    public IGamepad? GetGamepadByIndex(int index) => this.gamepads[index];
+    public IGamepad? GetGamepadByAssociation(PlayerControllerAssociationDto pcaDto) => this.gamepads.Find(gamepad => gamepad.Id == pcaDto.ControllerId);
 
     public IGamepad? MainGamepad
     {
