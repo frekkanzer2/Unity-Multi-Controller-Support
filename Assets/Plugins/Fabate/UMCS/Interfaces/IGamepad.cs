@@ -20,7 +20,7 @@ public interface IGamepad
         get { return (IsConnected()) ? $"Gamepad {Id} of type {Type} is connected with status {ControllerSpecificStatus}" : $"Gamepad {Id} of type {Type} is connected, but there's an error. Actual status: {ControllerSpecificStatus}"; }
     }
 
-    enum Key
+    public enum Key
     {
         ActionButtonDown,
         ActionButtonRight,
@@ -40,17 +40,17 @@ public interface IGamepad
         LeftTrigger,
         RightTrigger
     }
-    enum Analog
+    public enum Analog
     {
         Left,
         Right
     }
-    enum PressureType
+    public enum PressureType
     {
         Single,
         Continue
     }
-    enum Orientation
+    public enum Orientation
     {
         Horizontal,
         Vertical

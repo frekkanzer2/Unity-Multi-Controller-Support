@@ -85,6 +85,13 @@ public class GamepadManager : MonoBehaviour
         }
     }
 
+    public bool IsButtonPressedFromAnyGamepad(IGamepad.Key key, IGamepad.PressureType pressure)
+    {
+        foreach (IGamepad g in this.gamepads)
+            if (g.IsButtonPressed(key, pressure)) return true;
+        return false;
+    }
+
     public void ReloadAvailableGamepads()
     {
         gamepads = new();
