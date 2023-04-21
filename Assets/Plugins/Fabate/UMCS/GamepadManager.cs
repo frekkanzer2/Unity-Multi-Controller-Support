@@ -72,6 +72,8 @@ public class GamepadManager : MonoBehaviour
     public IGamepad? GetGamepadByIndex(int index) => this.gamepads[index];
     public IGamepad? GetGamepadByAssociation(PlayerControllerAssociationDto pcaDto) => this.gamepads.Find(gamepad => gamepad.Id == pcaDto.ControllerId);
 
+    public List<IGamepad> GetGamepads() => this.gamepads;
+
     public IGamepad? MainGamepad
     {
         get

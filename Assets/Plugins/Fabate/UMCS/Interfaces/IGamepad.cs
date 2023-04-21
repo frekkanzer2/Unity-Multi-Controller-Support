@@ -8,6 +8,9 @@ public interface IGamepad
     bool IsConnected();
     bool IsButtonPressed(IGamepad.Key key, IGamepad.PressureType pressure);
     Vector2 GetAnalogMovement(IGamepad.Analog analog);
+    Vector2 GetAnalogMovement(IGamepad.Analog analog, Vector2 friction);
+    void InvertAnalog(IGamepad.Analog analog);
+    void InvertAnalog(IGamepad.Analog analog, IGamepad.Orientation orientation);
     string ControllerSpecificStatus
     {
         get;
@@ -46,6 +49,11 @@ public interface IGamepad
     {
         Single,
         Continue
+    }
+    enum Orientation
+    {
+        Horizontal,
+        Vertical
     }
 
 }
