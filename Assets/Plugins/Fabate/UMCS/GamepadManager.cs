@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.DualShock;
+using UnityEngine.InputSystem.Switch;
 using UnityEngine.InputSystem.XInput;
 
 public class GamepadManager : MonoBehaviour
@@ -94,6 +95,7 @@ public class GamepadManager : MonoBehaviour
 
     public void ReloadAvailableGamepads()
     {
+        if (debugEnabled) Debug.Log("Reloading gamepads");
         gamepads = new();
         associations = new();
         int lastGamepadId = 1;
@@ -105,17 +107,34 @@ public class GamepadManager : MonoBehaviour
                 lastGamepadId++;
             }
         Gamepad[] gamepadsFromInputSystem = Gamepad.all.ToArray();
+        if (debugEnabled) Debug.Log($"Found {gamepadsFromInputSystem.Length} gamepads from Input System");
         foreach (Gamepad gp in gamepadsFromInputSystem)
         {
             if (gp is XInputController)
             {
+                if (debugEnabled) Debug.Log($"Found Xbox controller: {gp.name}-{gp.displayName}|{gp.device}-{gp.deviceId}|{gp.description}");
                 gamepads.Add(new XboxGamepad(lastGamepadId, (XInputController)gp));
                 lastGamepadId++;
             }
             else if (gp is DualShockGamepad)
             {
-
+                if (debugEnabled) Debug.Log($"Found PlayStation controller: {gp.name}-{gp.displayName}|{gp.device}-{gp.deviceId}|{gp.description}");
             }
+            else
+            if (debugEnabled) Debug.Log($"Detected not managed gamepad: {gp.name}-{gp.displayName}|{gp.device}-{gp.deviceId}|{gp.description}");
+        }
+        Joystick[] joysticksFromInputSystem = Joystick.all.ToArray();
+        if (debugEnabled) Debug.Log($"Found {gamepadsFromInputSystem.Length} joysticks from Input System");
+        foreach (Joystick j in joysticksFromInputSystem)
+        {
+            if (j.name.Contains("ZhiXu"))
+            {
+                if (debugEnabled) Debug.Log($"Detected ZhiXu Pro Controller gamepad: {j.name}-{j.displayName}|{j.device}-{j.deviceId}|{j.description}");
+                gamepads.Add(new ZhiXuGamepad(lastGamepadId, j));
+                lastGamepadId++;
+            }
+            else
+            if (debugEnabled) Debug.Log($"Detected not managed gamepad: {j.name}-{j.displayName}|{j.device}-{j.deviceId}|{j.description}");
         }
     }
 
