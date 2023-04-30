@@ -119,6 +119,8 @@ public class GamepadManager : MonoBehaviour
             else if (gp is DualShockGamepad)
             {
                 if (debugEnabled) Debug.Log($"Found PlayStation controller: {gp.name}-{gp.displayName}|{gp.device}-{gp.deviceId}|{gp.description}");
+                gamepads.Add(new PS4Gamepad(lastGamepadId, (DualShockGamepad)gp));
+                lastGamepadId++;
             }
             else
             if (debugEnabled) Debug.Log($"Detected not managed gamepad: {gp.name}-{gp.displayName}|{gp.device}-{gp.deviceId}|{gp.description}");
