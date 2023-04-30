@@ -29,8 +29,7 @@ public class JoyconGamepad : IGamepad
 
     public Vector2 GetAnalogMovement(IGamepad.Analog analog)
     {
-        Vector2 values = Vector2.zero;
-        Vector2 stick = _reference.GetStick();
+        Vector2 values, stick = _reference.GetStick();
         if (_reference.isLeft)
             values = new Vector2(stick.y, stick.x * -1);
         else

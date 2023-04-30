@@ -118,6 +118,18 @@ public class PS4Gamepad : IGamepad
             case IGamepad.Key.RightAnalog:
                 button = _reference.rightStickButton;
                 break;
+            case IGamepad.Key.MovementButtonRight:
+                button = _reference.dpad.right;
+                break;
+            case IGamepad.Key.MovementButtonLeft:
+                button = _reference.dpad.left;
+                break;
+            case IGamepad.Key.MovementButtonDown:
+                button = _reference.dpad.down;
+                break;
+            case IGamepad.Key.MovementButtonUp:
+                button = _reference.dpad.up;
+                break;
             default:
                 throw new System.NotImplementedException($"Key not implemented for gamepad {Type}");
         }
